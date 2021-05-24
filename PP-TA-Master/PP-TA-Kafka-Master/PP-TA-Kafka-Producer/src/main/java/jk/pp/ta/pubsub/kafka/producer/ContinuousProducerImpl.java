@@ -6,7 +6,6 @@ import java.util.concurrent.ConcurrentHashMap;
 import org.apache.kafka.clients.producer.Producer;
 import org.javatuples.Pair;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.stereotype.Component;
 
 import jk.pp.engg.foundations.common.core.pubsub.PubSubCallBackHandler;
 import jk.pp.engg.foundations.common.core.pubsub.PubSubKey;
@@ -16,7 +15,6 @@ import jk.pp.engg.foundations.common.core.pubsub.PubSubTopic;
 import jk.pp.engg.foundations.common.service.core.pubsub.PubSubProducerService;
 
 @ConditionalOnProperty(name = "pp.ta.pubsub.kafka.producer.apache.enabled", havingValue = "true")
-@Component("KafkaContinuousProducerImpl")
 public class ContinuousProducerImpl extends KafkaBaseProducerImpl<PubSubKey, PubSubMessage, PubSubResult>
 		implements PubSubProducerService<PubSubKey, PubSubMessage, PubSubResult> {
 
@@ -37,6 +35,8 @@ public class ContinuousProducerImpl extends KafkaBaseProducerImpl<PubSubKey, Pub
 	public PubSubResult publishMessage(String topic, Pair<PubSubKey, PubSubMessage> msgKeyAndVal,
 			PubSubTopic pubSubTopic, PubSubCallBackHandler<PubSubKey, PubSubMessage, PubSubResult> callBackHandler)
 			throws Exception {
+
+		System.out.println("publishMessage topic -> " + topic);
 
 		PubSubResult result = this.publishAMessageToKafka(msgKeyAndVal, this.getOrCreateProducer(pubSubTopic),
 				pubSubTopic);

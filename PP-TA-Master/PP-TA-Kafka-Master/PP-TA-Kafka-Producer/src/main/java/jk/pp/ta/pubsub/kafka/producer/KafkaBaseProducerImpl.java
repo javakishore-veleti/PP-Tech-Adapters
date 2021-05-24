@@ -63,6 +63,8 @@ public class KafkaBaseProducerImpl<K extends PubSubKey, V extends PubSubMessage,
 	protected PubSubResult publishAMessageToKafka(Pair<K, V> msgKeyAndVal, Producer<String, String> producer,
 			PubSubTopic pubSubTopic) {
 
+		System.out.println("publishAMessageToKafka msgKeyAndVal -> " + msgKeyAndVal);
+
 		producer.send(new ProducerRecord<String, String>(pubSubTopic.getTopic(),
 				msgKeyAndVal.getValue0().generateKeyString(), msgKeyAndVal.getValue1().generateMessageAsJson()));
 
