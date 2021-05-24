@@ -11,4 +11,44 @@
 	<artifactId>PP-TA-Kafka-Producer</artifactId>
 	<packaging>jar</packaging>
 	<name>PP-TA-Kafka-Producer</name>
+	<dependencies>
+		<dependency>
+			<groupId>
+					jk.provider.portal.engineering.foundations
+				</groupId>
+			<artifactId>PP-Engg-Common-Core</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>
+					jk.provider.portal.engineering.foundations
+				</groupId>
+			<artifactId>PP-Engg-Common-Domain</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>
+					jk.provider.portal.engineering.foundations
+				</groupId>
+			<artifactId>PP-Engg-Common-Service</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>
+				jk.provider.portal.engineering.foundations
+			</groupId>
+			<artifactId>PP-Engg-Common-PubSub</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter</artifactId>
+			<scope>provided</scope>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/org.apache.commons/commons-lang3 -->
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-lang3</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+		</dependency>
+	</dependencies>
 </project>
