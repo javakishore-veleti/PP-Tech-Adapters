@@ -2,6 +2,7 @@ package jk.pp.ta.pubsub.kafka.producer;
 
 import java.util.List;
 
+import org.apache.kafka.clients.producer.Producer;
 import org.javatuples.Pair;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
@@ -14,29 +15,42 @@ import jk.pp.engg.foundations.common.core.pubsub.PubSubTopic;
 import jk.pp.engg.foundations.common.service.core.pubsub.PubSubProducerService;
 
 @ConditionalOnProperty(name = "pp.ta.pubsub.kafka.producer.apache.enabled", havingValue = "true")
-@Component("KafkaProducerContinuousImpl")
-public class KafkaProducerContinuousImpl implements PubSubProducerService<PubSubKey, PubSubMessage, PubSubResult> {
+@Component("KafkaIntermittenProducerImpl")
+public class IntermittenProducerImpl extends KafkaBaseProducerImpl<PubSubKey, PubSubMessage, PubSubResult>
+		implements PubSubProducerService<PubSubKey, PubSubMessage, PubSubResult> {
 
 	@Override
 	public PubSubResult publishMessage(String topic, Pair<PubSubKey, PubSubMessage> msgKeyAndVal,
-			PubSubTopic pubSubTopic, PubSubCallBackHandler<PubSubKey, PubSubMessage, PubSubResult> callBackHandler) throws Exception {
+			PubSubTopic pubSubTopic, PubSubCallBackHandler<PubSubKey, PubSubMessage, PubSubResult> callBackHandler)
+			throws Exception {
 
-		PubSubResult result = new PubSubResult();
+		Producer<String, String> producer = this.createProducer(pubSubTopic);
+
+		PubSubResult result = this.publishAMessageToKafka(msgKeyAndVal, producer, pubSubTopic);
+
 		if (callBackHandler != null) {
 			callBackHandler.callback(msgKeyAndVal, result);
 		}
+
+		producer.close();
 
 		return result;
 	}
 
 	@Override
 	public PubSubResult publishMessages(String topic, List<Pair<PubSubKey, PubSubMessage>> msgKeyAndVals,
-			PubSubTopic pubSubTopic, PubSubCallBackHandler<PubSubKey, PubSubMessage, PubSubResult> callBackHandler) throws Exception {
+			PubSubTopic pubSubTopic, PubSubCallBackHandler<PubSubKey, PubSubMessage, PubSubResult> callBackHandler)
+			throws Exception {
 
-		PubSubResult result = new PubSubResult();
+		Producer<String, String> producer = this.createProducer(pubSubTopic);
+
+		PubSubResult result = this.publishMessagesToKafka(msgKeyAndVals, producer, pubSubTopic);
+
 		if (callBackHandler != null) {
 			callBackHandler.callback(msgKeyAndVals, result);
 		}
+
+		producer.close();
 
 		return result;
 	}
