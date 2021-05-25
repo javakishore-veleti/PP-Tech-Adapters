@@ -2,7 +2,9 @@ package jk.pp.ta.pubsub.kafka.consumer;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ExecutorService;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import jk.pp.engg.foundations.common.core.pubsub.PubSubTopic;
 import lombok.AllArgsConstructor;
@@ -14,25 +16,28 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class ConsumerRuntimeContext {
 
+	private static final Logger LOGGER = LoggerFactory.getLogger(ConsumerRuntimeContext.class);
+
 	private PubSubTopic pubSubTopic;
 	private List<KafkaConsumerRunnable> consumers;
 
 	public void addKafkaConsumerThread(KafkaConsumerRunnable thread) {
-		System.out.println("ConsumerRuntimeContext::addKafkaConsumerThread Entered");
+		LOGGER.debug("Enter");
 
 		if (this.consumers == null) {
 			this.consumers = new ArrayList<>();
 		}
 
 		this.consumers.add(thread);
+
+		LOGGER.debug("Exit");
 	}
 
-	public void initiateConsumerThreads(ExecutorService consumerExecSvc) {
-		System.out.println("ConsumerRuntimeContext::initiateConsumerThreads Entered");
+	public void initiateConsumerThreads() {
+		LOGGER.debug("Enter");
 
 		if (this.consumers == null || this.consumers.size() == 0) {
-			System.out.println(
-					"ConsumerRuntimeContext::initiateConsumerThreads Exiting consumers == null || this.consumers.size() == 0");
+			LOGGER.debug("Exiting consumers == null || this.consumers.size() == 0");
 			return;
 		}
 
@@ -44,7 +49,7 @@ public class ConsumerRuntimeContext {
 			aConsumer.setThreadStarted(Boolean.TRUE);
 		});
 
-		System.out.println("ConsumerRuntimeContext::initiateConsumerThreads Exiting");
+		LOGGER.debug("Exit");
 	}
 
 }

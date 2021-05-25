@@ -7,12 +7,16 @@ import java.util.Properties;
 
 import org.apache.kafka.clients.consumer.Consumer;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import jk.pp.engg.foundations.common.core.pubsub.PubSubTopic;
 import jk.pp.ta.pubsub.kafka.consumer.ConsumerRuntimeContext;
 import jk.pp.ta.pubsub.kafka.consumer.KafkaConsumerRunnable;
 
 public class KafkaConnectUtil {
+
+	private static final Logger LOGGER = LoggerFactory.getLogger(KafkaConnectUtil.class);
 
 	public static Properties createConsumerConfig(PubSubTopic pubSubTopic) throws Exception {
 
@@ -64,13 +68,12 @@ public class KafkaConnectUtil {
 	}
 
 	public static Consumer<String, String> createConsumer(Properties consumerConfig, PubSubTopic pubSubTopic) {
-
-		System.out.println("KafkaConnectUtil createConsumer Entered");
+		LOGGER.debug("Enter");
 
 		Consumer<String, String> consumer = new KafkaConsumer<>(consumerConfig);
 		consumer.subscribe(Arrays.asList(pubSubTopic.getTopic()));
 
-		System.out.println("KafkaConnectUtil createConsumer Exiting");
+		LOGGER.debug("Exit");
 		return consumer;
 	}
 }

@@ -10,8 +10,6 @@ import jk.pp.ta.pubsub.kafka.consumer.util.KafkaConnectUtil;
 public class KafkaBaseConsumerImpl<K extends PubSubKey, V extends PubSubMessage, R extends PubSubResult> {
 
 	protected ConsumerRuntimeContext createConsumerRuntimeContext(PubSubTopic pubSubTopic) throws Exception {
-
-		System.out.println("consumerMessageFromKafka pubSubTopic -> " + pubSubTopic);
 		return KafkaConnectUtil.createConsumerRuntimeContext(pubSubTopic);
 	}
 

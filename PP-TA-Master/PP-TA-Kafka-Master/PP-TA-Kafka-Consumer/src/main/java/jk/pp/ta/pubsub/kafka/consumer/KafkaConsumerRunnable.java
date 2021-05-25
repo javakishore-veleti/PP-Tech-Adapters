@@ -12,6 +12,8 @@ import java.util.concurrent.locks.ReentrantLock;
 import org.apache.kafka.clients.consumer.Consumer;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.javatuples.Pair;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -28,6 +30,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class KafkaConsumerRunnable implements Runnable {
 
+	private static final Logger LOGGER = LoggerFactory.getLogger(KafkaConsumerRunnable.class);
+
 	public static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
 
 	private Boolean keepPoolingKafka = Boolean.TRUE;
@@ -43,6 +47,7 @@ public class KafkaConsumerRunnable implements Runnable {
 	private volatile boolean stopped = false;
 	private volatile boolean started = false;
 	private volatile boolean finished = false;
+	@SuppressWarnings("rawtypes")
 	private final CompletableFuture completion = new CompletableFuture<>();
 
 	@Override
@@ -56,19 +61,20 @@ public class KafkaConsumerRunnable implements Runnable {
 		started = true;
 		startStopLock.unlock();
 
-		System.out.println("KafkaConsumerRunnable run");
-
 		try {
+
+			LOGGER.debug("Sleeping [consumerStartDelay] for " + consumerStartDelay);
 			Thread.sleep(consumerStartDelay);
+
 		} catch (InterruptedException e) {
-			e.printStackTrace();
+			LOGGER.error("Exception occured", e);
 		}
 
 		Consumer<String, String> consumer = null;
 		try {
 			consumer = KafkaConnectUtil.createConsumer(consumerProp, pubSubTopic);
 
-			System.out.println("KafkaConsumerRunnable this.keepPoolingKafka " + this.keepPoolingKafka);
+			LOGGER.debug("this.keepPoolingKafka " + this.keepPoolingKafka);
 
 			while (this.keepPoolingKafka) {
 
@@ -91,9 +97,11 @@ public class KafkaConsumerRunnable implements Runnable {
 				});
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			LOGGER.error("Exception occured", e);
 		} finally {
 			if (consumer != null) {
+
+				LOGGER.info("Finally block, closing the Kafka Consumer Connection");
 				consumer.close();
 			}
 		}
