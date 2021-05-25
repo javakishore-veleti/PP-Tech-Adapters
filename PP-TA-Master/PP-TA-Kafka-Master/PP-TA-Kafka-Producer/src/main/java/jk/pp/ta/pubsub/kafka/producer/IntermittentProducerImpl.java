@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.apache.kafka.clients.producer.Producer;
 import org.javatuples.Pair;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 
 import jk.pp.engg.foundations.common.core.pubsub.PubSubCallBackHandler;
 import jk.pp.engg.foundations.common.core.pubsub.PubSubKey;
@@ -13,7 +12,6 @@ import jk.pp.engg.foundations.common.core.pubsub.PubSubResult;
 import jk.pp.engg.foundations.common.core.pubsub.PubSubTopic;
 import jk.pp.engg.foundations.common.service.core.pubsub.PubSubProducerService;
 
-@ConditionalOnProperty(name = "pp.ta.pubsub.kafka.producer.apache.enabled", havingValue = "true")
 public class IntermittentProducerImpl extends KafkaBaseProducerImpl<PubSubKey, PubSubMessage, PubSubResult>
 		implements PubSubProducerService<PubSubKey, PubSubMessage, PubSubResult> {
 
